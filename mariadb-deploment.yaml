@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-db
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secret-db
+  namespace: ns-db
+type: Opaque
+data:
+  MYSQL_ROOT_PASSWORD: c3ZwMTIzCg== 
+  MYSQL_USER: c3ZwCg==
+  MYSQL_PASSWORD: c3ZwMTIzCg==
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb-deployment
+  namespace: ns-db
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels: 
+        app: mariadb
+        tier: backend
+    spec:
+      containers:
+      - name: mariadb
+        image: docker.io/mariadb:latest
+        envFrom:
+         - secretRef:
+             name: secret-db
+        env:
+         - name: MYSQL_ROOT_PASSWORD
+           valueFrom:
+             secretKeyRef: 
+               name: secret-db
+               key: MYSQL_ROOT_PASSWORD
+        ports:
+         - containerPort: 3306
+           protocol: TCP
+
+    
+      
+     

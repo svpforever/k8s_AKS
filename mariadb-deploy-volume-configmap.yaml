@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb-deployment
+  namespace: ns-db
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels: 
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: docker.io/mariadb:latest
+          volumeMounts:
+            - name: cmformysql
+              mountPath: "/cm/configs"
+              readOnly: true
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: secret-db
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+               secretKeyRef: 
+                 name: secret-db
+                 key: MYSQL_ROOT_PASSWORD
+      volumes:
+        - name: cmformysql
+          configMap:
+            name: mysql-config
+
+    
+      
+     
