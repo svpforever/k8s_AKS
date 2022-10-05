@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: pod-secrets-via-file
+  name: pod-secrets-via-file
+spec:
+  containers:
+  - image: redis
+    name: pod-secrets-via-file
+    volumeMounts:
+    - mountPath: /secrets
+      name: kube-api-access-gxfb6
+  volumes:
+  - name: kube-api-access-gxfb6
+    secret:
+      secretName: super-secret

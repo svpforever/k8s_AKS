@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: denies-ingress-all-traffic
+spec:
+  policyTypes:
+  - Ingress
+  podSelector:
+    matchLabels:
+      app: nginx
+  ingress:
+    - from:
+      - podSelector: {}

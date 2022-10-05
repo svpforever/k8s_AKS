@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hello-job
+spec:
+    parallelism: 5
+    completions: 10
+    template:
+      spec:
+        containers:
+        - command:
+          - echo
+          - Hello
+          - from
+          - the
+          - Kubernetes
+          - cluster
+          image: busybox
+          name: hello-job
+          resources: {}
+        restartPolicy: Never

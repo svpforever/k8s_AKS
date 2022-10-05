@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hungry-bear
+  namespace: default
+spec:
+  volumes:
+  - name: volume1
+    emptyDir:
+  containers:
+  - image: alpine
+    name: alpinec
+    command: ["/bin/sh", "-c", "if [ -f /tmp/calm.txt ]; then sleep 100; else exit 1; fi"]
+    volumeMounts:
+    - name: volume1
+      mountPath: /tmp
+  initContainers:
+  - name: create
+    image: alpine
+    command: ["/bin/sh", "-c", "touch /tmp/calm.txt"]
+    volumeMounts:
+    - name: volume1
+      mountPath: /tmp

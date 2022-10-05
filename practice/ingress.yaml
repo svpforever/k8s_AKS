@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: pod-ingress-cka
+  namespace: web
+spec:
+  podSelector:
+    matchLabels:
+      app: db
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: web
+    - podSelector:
+        matchLabels:
+          type: monitoring
+    ports:
+    - protocol: TCP
+      port: 7873
+      
